@@ -22,42 +22,27 @@ const Layout = ({ children }) => {
   };
 
   const onAddFolder = () => {
-    if (fileName) {
-      if (id) {
-        const parentid = id;
-        //   window.alert(fileName);
-        dispatch(
-          AddItem({
-            id: null,
-            parentid: parentid,
-            fileName,
-            isFolder: fileType == "Folder" ? true : false,
-          })
-        );
-        setShowModal(false);
-        setFileName("");
-        setFileType("");
-        // dispatch(fetchById(parentid));
-      } else {
-        const id = null;
-        //   window.alert(fileName);
-        dispatch(
-          AddItem({
-            id,
-            fileName,
-            isFolder: fileType == "Folder" ? true : false,
-          })
-        );
-        setShowModal(false);
-        setFileName("");
-        setFileType("");
-      }
+    if (!fileName) {
+      alert("Please enter a file name");
+      return;
+    }
 
-      //logic
-      //   handleInsertNode(explorer.id, fileName,    .isFolder);
-      // setShowInput({ ...showInput, visible: false });
-    } else {
-      window.alert("Please enter a file name");
+    dispatch(
+      AddItem({
+        parentid: id || null,
+        fileName,
+        isFolder: fileType === "Folder",
+      })
+    );
+
+    setShowModal(false);
+    setFileName("");
+    setFileType("");
+
+    if (id) {
+      setTimeout(() => {
+        dispatch(fetchById(id)); // ✅ Fetch updated folder contents
+      }, 100);
     }
   };
 

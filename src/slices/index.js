@@ -23,8 +23,8 @@ const saveState = (state) => {
 // Recursive function to find a node by ID
 const findNodeById = (nodes, id) => {
   for (let node of nodes) {
-    if (node.id === id) return node;
-    if (Array.isArray(node.items) && node.items.length) {
+    if (node.id == id) return node;
+    if (node.isFolder && node.items.length) {
       const found = findNodeById(node.items, id);
       if (found) return found;
     }
@@ -51,46 +51,32 @@ export const fileExploreSlice = createSlice({
   reducers: {
     AddItem: (state, action) => {
       const { parentid, fileName, isFolder } = action.payload;
+      const parentNode = parentid
+        ? findNodeById(state.fileExplores, parentid)
+        : null;
+      const newId = parentNode
+        ? parentNode.items.length + 1
+        : state.fileExplores.length + 1;
 
-      if (parentid) {
-        const selectedNode = findNodeById(
-          JSON.parse(JSON.stringify(state.fileExplores)),
-          parentid
-        ); // 🔥 No cloning
-        if (selectedNode) {
-          selectedNode.items.push({
-            id: Date.now(),
-            name: fileName,
-            isFolder,
-            items: isFolder ? [] : [],
-          });
+      const newItem = {
+        id: newId, // Updated to use length + 1 instead of Date
+        name: fileName,
+        isFolder,
+        items: isFolder ? [] : [],
+      };
 
-          saveState({ ...state, fileExplores: state.fileExplores }); // 🔥 Save after mutation
-        } else {
-          console.error(`Parent node with ID ${parentid} not found.`);
-        }
+      if (parentNode) {
+        parentNode.items.push(newItem);
       } else {
-        // Adding a new root-level item
-        const newNode = {
-          id: Date.now(),
-          name: fileName,
-          isFolder,
-          items: isFolder ? [] : [],
-        };
-        state.fileExplores.push(newNode);
-
-        saveState({ ...state, fileExplores: state.fileExplores });
+        state.fileExplores.push(newItem);
       }
+
+      saveState(state); // ✅ Save updated state
     },
 
     fetchById: (state, action) => {
-      const selectedNode = findNodeById(
-        JSON.parse(JSON.stringify(state.fileExplores)),
-        action.payload
-      );
+      const selectedNode = findNodeById(state.fileExplores, action.payload);
       state.singleitems = selectedNode ? selectedNode.items : [];
-
-      console.log("Fetched Node:", selectedNode); // ✅ Debugging
     },
   },
 });
