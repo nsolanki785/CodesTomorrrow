@@ -23,13 +23,24 @@ const saveState = (state) => {
 // Recursive function to find a node by ID
 const findNodeById = (nodes, id) => {
   for (let node of nodes) {
-    if (node.id == id) return node;
+    if (node.id === id) return node;
     if (node.isFolder && node.items.length) {
       const found = findNodeById(node.items, id);
       if (found) return found;
     }
   }
   return null;
+};
+
+// Recursive function to delete a node by ID
+const deleteNodeById = (nodes, id) => {
+  return nodes.filter((node) => {
+    if (node.id === id) return false;
+    if (node.isFolder && node.items.length) {
+      node.items = deleteNodeById(node.items, id);
+    }
+    return true;
+  });
 };
 
 // Load initial state from localStorage or use default state
@@ -57,7 +68,7 @@ export const fileExploreSlice = createSlice({
       const newId = Math.floor(Math.random() * 1000);
 
       const newItem = {
-        id: newId, // Updated to use length + 1 instead of Date
+        id: newId,
         name: fileName,
         isFolder,
         items: isFolder ? [] : [],
@@ -69,15 +80,31 @@ export const fileExploreSlice = createSlice({
         state.fileExplores.push(newItem);
       }
 
-      saveState(state); // ✅ Save updated state
+      saveState(state);
     },
 
     fetchById: (state, action) => {
       const selectedNode = findNodeById(state.fileExplores, action.payload);
       state.singleitems = selectedNode ? selectedNode.items : [];
     },
+
+    EditItem: (state, action) => {
+      const { id, newName } = action.payload;
+      const node = findNodeById(state.fileExplores, id);
+      if (node) {
+        node.name = newName;
+        saveState(state);
+      }
+    },
+
+    DeleteItem: (state, action) => {
+      const { id } = action.payload;
+      state.fileExplores = deleteNodeById(state.fileExplores, id);
+      saveState(state);
+    },
   },
 });
 
-export const { AddItem, fetchById } = fileExploreSlice.actions;
+export const { AddItem, fetchById, EditItem, DeleteItem } =
+  fileExploreSlice.actions;
 export default fileExploreSlice.reducer;

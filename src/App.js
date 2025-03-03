@@ -2,14 +2,14 @@ import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Folders from "./pages/folders";
-import Folder from "./pages/folder";
+import SubFolder from "./pages/subfolder";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Folders />}></Route>
-        <Route path="/:id" element={<Folder />}></Route>
+        <Route path="/:id" element={<SubFolder />}></Route>
       </Routes>
     </BrowserRouter>
   );
