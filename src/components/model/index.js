@@ -10,8 +10,9 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-[#a5a5c7] bg-opacity-50">
-      <div className="relative bg-white rounded-lg shadow-lg dark:bg-gray-700 w-full max-w-2xl">
+    <>
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 opacity-50"></div>
+      <div className="fixed z-50 top-1/3 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg dark:bg-gray-700 w-1/2">
         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
             Add {fileType}
@@ -41,17 +42,13 @@ const Modal = ({
         </div>
         <div className="p-4 md:p-5 space-y-4">
           <input
-            // autoFocus
-            className="w-full p-3 border-[1.5px] border-gray-300 "
-            // onKeyDown={onAddFolder}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={(e) => setFileName(e.target.value)}
             placeholder={`Enter a ${fileType} name`}
-            // onBlur={() => setShowInput({ ...showInput, visible: false })}
             type="text"
-            // className="inputContainer__input"
           />
         </div>
-        <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <div className="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -68,7 +65,7 @@ const Modal = ({
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

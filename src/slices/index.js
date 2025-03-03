@@ -54,9 +54,7 @@ export const fileExploreSlice = createSlice({
       const parentNode = parentid
         ? findNodeById(state.fileExplores, parentid)
         : null;
-      const newId = parentNode
-        ? parentNode.items.length + 1
-        : state.fileExplores.length + 1;
+      const newId = Math.floor(Math.random() * 1000);
 
       const newItem = {
         id: newId, // Updated to use length + 1 instead of Date

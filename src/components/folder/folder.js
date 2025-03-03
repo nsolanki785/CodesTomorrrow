@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router";
 const Folder = ({ handleInsertNode }) => {
   const navigate = useNavigate();
   const explorer = useSelector((store) => store?.fileExplores?.fileExplores);
+  const { id } = useParams();
 
   const [showInput, setShowInput] = useState({
     visible: false,

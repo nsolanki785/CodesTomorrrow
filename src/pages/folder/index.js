@@ -10,7 +10,7 @@ const Folder = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    // dispatch(fetchById(id));
+    dispatch(fetchById(id));
   }, [dispatch, id]);
   const explorer = useSelector((store) => store?.fileExplores?.singleitems);
 
